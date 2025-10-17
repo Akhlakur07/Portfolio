@@ -1,4 +1,10 @@
 /* index.css */
+@import url("https://fonts.googleapis.com/css2?family=Anton+SC&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Monoton&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Kdam+Thmor+Pro&display=swap");
+
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: black --default;
@@ -32,6 +38,18 @@
   background: #0f0f23;
 }
 
+.anton {
+  font-family: "Anton SC", sans-serif;
+}
+
+.monoton {
+  font-family: "Monoton", sans-serif;
+}
+
+.kdam {
+  font-family: "Kdam Thmor Pro", sans-serif;
+}
+
 /* Firefox Scrollbar */
 * {
   scrollbar-width: thin;
@@ -52,4 +70,9 @@ html {
 ::-moz-selection {
   background: rgba(139, 92, 246, 0.3);
   color: white;
+}
+
+html,
+body {
+  overflow-x: hidden;
 }

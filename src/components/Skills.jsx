@@ -28,10 +28,13 @@ import {
   SiHtml5,
   SiCss3,
 } from "react-icons/si";
+import Shuffle from "./Shuffle";
 
 const Skills = () => {
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: false, margin: "-100px" });
+
+  // ✅ Run animation once when section first enters view
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   const [hoveredSkill, setHoveredSkill] = useState(null);
 
@@ -82,9 +85,10 @@ const Skills = () => {
     },
   };
 
+  // ✅ GSAP animation after Shuffle completes
   useEffect(() => {
     if (isInView) {
-      const tl = gsap.timeline();
+      const tl = gsap.timeline({ delay: 1 }); // wait 1s for Shuffle to finish
 
       // Animate skill cards
       tl.fromTo(
@@ -125,7 +129,7 @@ const Skills = () => {
     }
   }, [isInView]);
 
-  const SkillItem = ({ skill, categoryKey, index }) => {
+  const SkillItem = ({ skill }) => {
     return (
       <motion.div
         className="skill-item"
@@ -158,7 +162,7 @@ const Skills = () => {
     <section
       id="skills"
       ref={sectionRef}
-      className="min-h-screen py-20 px-6 relative overflow-hidden"
+      className="min-h-screen pt-25 pb-10 px-6 relative overflow-hidden"
     >
       {/* Background Elements */}
       <div className="absolute top-20 -left-40 w-80 h-80 bg-purple-600/10 rounded-full blur-3xl"></div>
@@ -174,17 +178,37 @@ const Skills = () => {
         >
           <motion.h2
             className="text-5xl md:text-7xl font-bold mb-4"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            initial={false} // ✅ prevent Framer from conflicting with Shuffle
           >
-            <span className="bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-              SKILLS
-            </span>
+            <Shuffle
+              text="skills"
+              shuffleDirection="left"
+              duration={1}
+              animationMode="evenodd"
+              shuffleTimes={1}
+              ease="power3.out"
+              stagger={0.03}
+              threshold={0.1}
+              triggerOnce={true}
+              triggerOnHover={false}
+              respectReducedMotion={true}
+              className="bg-clip-text"
+            />
             <br />
-            <span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-              & TECHNOLOGIES
-            </span>
+              <Shuffle
+                text="& TECHNOLOGIES"
+                shuffleDirection="right"
+                duration={1}
+                animationMode="evenodd"
+                shuffleTimes={1}
+                ease="power3.out"
+                stagger={0.03}
+                threshold={0.1}
+                triggerOnce={true}
+                triggerOnHover={false}
+                respectReducedMotion={true}
+                className="text-purple-500"
+              />
           </motion.h2>
 
           <motion.p
@@ -197,9 +221,9 @@ const Skills = () => {
           </motion.p>
         </motion.div>
 
-        {/* Skills Grid - Unconventional Layout */}
+        {/* Skills Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {Object.entries(skills).map(([key, category], categoryIndex) => (
+          {Object.entries(skills).map(([key, category]) => (
             <motion.div
               key={key}
               className="skill-card relative group"
@@ -248,13 +272,8 @@ const Skills = () => {
 
                   {/* Skills Grid */}
                   <div className="grid grid-cols-2 gap-3">
-                    {category.items.map((skill, index) => (
-                      <SkillItem
-                        key={skill.name}
-                        skill={skill}
-                        categoryKey={key}
-                        index={index}
-                      />
+                    {category.items.map((skill) => (
+                      <SkillItem key={skill.name} skill={skill} />
                     ))}
                   </div>
                 </div>

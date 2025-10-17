@@ -83,7 +83,7 @@ const Navigation = () => {
       <motion.nav
         className={`fixed top-6 left-1/2 transform -translate-x-1/2 z-50 hidden lg:block ${
           isScrolled
-            ? 'backdrop-blur-xl bg-gray-900/80 border border-gray-700/50'
+            ? 'backdrop-blur-md bg-gray-900/80 border border-gray-700/50'
             : 'bg-transparent'
         } rounded-2xl transition-all duration-300`}
         initial={{ y: -100, opacity: 0 }}
@@ -128,7 +128,7 @@ const Navigation = () => {
       <motion.button
         className={`fixed top-6 right-6 z-50 lg:hidden w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-300 ${
           isScrolled
-            ? 'backdrop-blur-xl bg-gray-900/80 border border-gray-700/50'
+            ? 'backdrop-blur-md bg-gray-900/80 border border-gray-700/50'
             : 'bg-gray-900/50 backdrop-blur-sm border border-gray-700/30'
         }`}
         onClick={() => setIsOpen(!isOpen)}
@@ -176,7 +176,7 @@ const Navigation = () => {
             />
 
             <motion.div
-              className="fixed top-24 right-6 z-40 lg:hidden bg-gray-900/95 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-4 min-w-[200px]"
+              className="fixed top-24 right-6 z-40 lg:hidden bg-gray-900/95 backdrop-blur-md border border-gray-700/50 rounded-2xl p-4 min-w-[200px]"
               initial={{ opacity: 0, scale: 0.8, y: -20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.8, y: -20 }}
