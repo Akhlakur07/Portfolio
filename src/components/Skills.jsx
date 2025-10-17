@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // components/Skills.jsx
 import React, { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
