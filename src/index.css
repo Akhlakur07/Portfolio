@@ -3,3 +3,53 @@
 @plugin "daisyui" {
   themes: black --default;
 }
+
+/* Custom Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #8b5cf6 0%, #ec4899 50%, #3b82f6 100%);
+  border-radius: 5px;
+  border: 2px solid #0f0f23;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #a78bfa 0%, #f472b6 50%, #60a5fa 100%);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(180deg, #7c3aed 0%, #db2777 50%, #1d4ed8 100%);
+}
+
+::-webkit-scrollbar-corner {
+  background: #0f0f23;
+}
+
+/* Firefox Scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #8b5cf6 #0f0f23;
+}
+
+/* Smooth scrolling for the entire website */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom selection color */
+::selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: white;
+}
+
+::-moz-selection {
+  background: rgba(139, 92, 246, 0.3);
+  color: white;
+}

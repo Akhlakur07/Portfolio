@@ -10,7 +10,7 @@ const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   const navItems = [
-    { id: 'hero', label: 'Home', icon: Home, href: '#hero' },
+    { id: 'home', label: 'Home', icon: Home, href: '#home' },
     { id: 'about', label: 'About', icon: User, href: '#about' },
     { id: 'skills', label: 'Skills', icon: Code, href: '#skills' },
     { id: 'projects', label: 'Projects', icon: Folder, href: '#projects' },

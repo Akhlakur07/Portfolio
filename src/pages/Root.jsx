@@ -6,11 +6,11 @@ import Navigation from "../components/Navigation";
 
 const Root = () => {
   return (
-    <div className="relative min-h-screen ref={containerRef}">
+    <div id="home" className="relative min-h-screen ref={containerRef}">
       <div className="fixed inset-0 -z-10">
         <LiquidEther
           colors={["#5227FF", "#FF9FFC", "#B19EEF"]}
-          mouseForce={20}
+          mouseForce={15}
           cursorSize={90}
           isViscous={false}
           viscous={30}
@@ -19,10 +19,10 @@ const Root = () => {
           resolution={0.3}
           isBounce={false}
           autoDemo={true}
-          autoSpeed={0.8}
+          autoSpeed={0.5}
           autoIntensity={2.2}
           takeoverDuration={0.25}
-          autoResumeDelay={1}
+          autoResumeDelay={0.5}
           autoRampDuration={0.6}
         />
       </div>
