@@ -63,7 +63,10 @@ const Hero = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center relative px-6">
+    <section
+      id="hero"
+      className="min-h-screen flex items-center justify-center relative px-6"
+    >
       <div className="text-center relative z-10">
         {/* Animated Background Orb */}
         <motion.div

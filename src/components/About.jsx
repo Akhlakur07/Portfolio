@@ -1,5 +1,6 @@
 // components/About.jsx
 import React, { useRef, useEffect } from 'react';
+// eslint-disable-next-line no-unused-vars
 import { motion, useInView } from 'framer-motion';
 import { Code2, Palette, Zap, Globe, GraduationCap } from 'lucide-react';
 import { gsap } from 'gsap';
