@@ -1,7 +1,7 @@
 // components/About.jsx
 import React, { useRef, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Code2, Palette, Zap, Globe } from 'lucide-react';
+import { Code2, Palette, Zap, Globe, GraduationCap } from 'lucide-react';
 import { gsap } from 'gsap';
 
 const About = () => {
@@ -10,6 +10,7 @@ const About = () => {
   
   const textRef = useRef(null);
   const cardsRef = useRef([]);
+  const educationRef = useRef(null);
 
   useEffect(() => {
     if (isInView) {
@@ -37,6 +38,12 @@ const About = () => {
           "-=0.4"
         );
       });
+
+      tl.fromTo(educationRef.current,
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.7)" },
+        "-=0.3"
+      );
     }
   }, [isInView]);
 
@@ -130,6 +137,69 @@ const About = () => {
                 When I'm not coding, you'll find me exploring new technologies, contributing to open-source projects, 
                 or designing unconventional user interfaces that challenge traditional web design norms.
               </p>
+            </motion.div>
+
+            {/* Education Status */}
+            <motion.div
+              ref={educationRef}
+              className="mt-8 p-6 bg-gray-900/50 backdrop-blur-sm border border-purple-500/30 rounded-2xl relative overflow-hidden group"
+              whileHover={{ 
+                scale: 1.02,
+                borderColor: "rgba(168, 85, 247, 0.6)",
+                transition: { duration: 0.3 }
+              }}
+            >
+              {/* Animated Background */}
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              
+              <div className="relative z-10 flex items-start gap-4">
+                <motion.div
+                  className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center"
+                  whileHover={{ 
+                    scale: 1.1,
+                    rotate: 5
+                  }}
+                >
+                  <GraduationCap className="w-6 h-6 text-white" />
+                </motion.div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-1">
+                    Undergraduate Student
+                  </h3>
+                  <p className="text-purple-300 font-medium">
+                    BRAC University
+                  </p>
+                  <p className="text-gray-400 text-sm mt-1">
+                    2022 - 2026
+                  </p>
+                  <motion.div 
+                    className="mt-3 w-full bg-gray-700 rounded-full h-2"
+                    initial={{ scaleX: 0 }}
+                    animate={isInView ? { scaleX: 1 } : {}}
+                    transition={{ duration: 1.5, delay: 1 }}
+                  >
+                    <div 
+                      className="bg-gradient-to-r from-purple-500 to-blue-500 h-2 rounded-full relative"
+                      style={{ width: '60%' }}
+                    >
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full"
+                        animate={{
+                          opacity: [0.5, 1, 0.5],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                        }}
+                      />
+                    </div>
+                  </motion.div>
+                  <p className="text-gray-400 text-xs mt-2">
+                    Currently in progress (Year 3)
+                  </p>
+                </div>
+              </div>
             </motion.div>
 
           </motion.div>
