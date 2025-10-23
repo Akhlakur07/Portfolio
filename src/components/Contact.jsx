@@ -11,8 +11,8 @@ import {
   Briefcase,
   ArrowUpRight,
   MessageCircle,
-  Calendar,
-  Sparkles,
+  Copy,
+  Check,
 } from "lucide-react";
 import { gsap } from "gsap";
 import Shuffle from "./Shuffle";
@@ -22,7 +22,7 @@ const Contact = () => {
   const isInView = useInView(sectionRef, { once: false, margin: "-100px" });
 
   const [activeCard, setActiveCard] = useState(null);
-  const [copiedItem, setCopiedItem] = useState(null);
+  const [copiedItems, setCopiedItems] = useState({});
 
   const contactMethods = [
     {
@@ -33,7 +33,6 @@ const Contact = () => {
       value: "akhlak.ur433@gmail.com",
       action: "mailto:akhlak.ur433@gmail.com",
       color: "from-purple-600 to-blue-600",
-      copyable: true,
     },
     {
       id: "whatsapp",
@@ -43,7 +42,6 @@ const Contact = () => {
       value: "+880 1305-685267",
       action: "https://wa.me/8801305685267",
       color: "from-green-600 to-emerald-600",
-      copyable: true,
     },
     {
       id: "phone",
@@ -53,7 +51,6 @@ const Contact = () => {
       value: "+880 1305-685267",
       action: "tel:+8801305685267",
       color: "from-blue-600 to-cyan-600",
-      copyable: true,
     },
     {
       id: "location",
@@ -63,7 +60,6 @@ const Contact = () => {
       value: "Mirpur, Dhaka",
       action: "#",
       color: "from-green-600 to-teal-600",
-      copyable: false,
     },
     {
       id: "github",
@@ -73,7 +69,6 @@ const Contact = () => {
       value: "github.com/Akhlakur07",
       action: "https://github.com/Akhlakur07",
       color: "from-gray-700 to-gray-900",
-      copyable: false,
     },
     {
       id: "linkedin",
@@ -83,7 +78,6 @@ const Contact = () => {
       value: "linkedin.com/in/akhlakur-rahman",
       action: "https://www.linkedin.com/in/akhlakur-rahman-92ba312bb/",
       color: "from-blue-500 to-blue-700",
-      copyable: false,
     },
   ];
 
@@ -108,38 +102,114 @@ const Contact = () => {
           stagger: 0.1,
         }
       );
-
-      // Animate CTA section
-      tl.fromTo(
-        ".cta-section",
-        {
-          opacity: 0,
-          y: 50,
-        },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          ease: "power3.out",
-        },
-        "-=0.5"
-      );
     }
   }, [isInView]);
 
-  const handleCopy = async (text, itemId) => {
+  const handleCopy = async (text, id) => {
     try {
       await navigator.clipboard.writeText(text);
-      setCopiedItem(itemId);
-      setTimeout(() => setCopiedItem(null), 2000);
+      setCopiedItems((prev) => ({ ...prev, [id]: true }));
+      setTimeout(() => {
+        setCopiedItems((prev) => ({ ...prev, [id]: false }));
+      }, 2000);
     } catch (err) {
-      console.error('Failed to copy text: ', err);
+      console.error("Failed to copy text: ", err);
     }
   };
 
   const ContactCard = ({ method }) => {
+    const isCopyable =
+      method.id === "email" ||
+      method.id === "whatsapp" ||
+      method.id === "phone";
+
+    if (isCopyable) {
+      return (
+        <motion.div
+          className="contact-card group"
+          onHoverStart={() => setActiveCard(method.id)}
+          onHoverEnd={() => setActiveCard(null)}
+          whileHover={{
+            y: -8,
+            transition: { duration: 0.3 },
+          }}
+        >
+          <div className="relative bg-gray-900/50 backdrop-blur-sm border border-gray-700/50 rounded-2xl p-6 h-full overflow-hidden hover:border-purple-500/50 transition-all duration-300">
+            {/* Gradient Overlay */}
+            <div
+              className={`absolute inset-0 bg-gradient-to-br ${method.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+            />
+
+            {/* Header */}
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div
+                  className={`w-12 h-12 rounded-xl bg-gradient-to-r ${method.color} flex items-center justify-center shadow-lg`}
+                >
+                  <method.icon className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white">
+                    {method.title}
+                  </h3>
+                  <p className="text-gray-400 text-sm">{method.description}</p>
+                </div>
+              </div>
+
+              <motion.button
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleCopy(method.value, method.id);
+                }}
+                className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 rounded-lg hover:bg-gray-700/50"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {copiedItems[method.id] ? (
+                  <Check className="w-5 h-5 text-green-400" />
+                ) : (
+                  <Copy className="w-5 h-5 text-purple-400" />
+                )}
+              </motion.button>
+            </div>
+
+            {/* Contact Value */}
+            <motion.p
+              className="text-purple-300 font-medium text-sm"
+              initial={{ opacity: 0.8 }}
+              whileHover={{ opacity: 1 }}
+            >
+              {method.value}
+            </motion.p>
+
+            {/* Hover Border Effect */}
+            <motion.div
+              className={`absolute inset-0 rounded-2xl bg-gradient-to-r ${method.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10`}
+              animate={{
+                scale: activeCard === method.id ? 1.02 : 1,
+              }}
+            >
+              <div className="absolute inset-[1px] rounded-2xl bg-gray-900/95"></div>
+            </motion.div>
+          </div>
+        </motion.div>
+      );
+    }
+
+    // Non-copyable cards (Location, GitHub, LinkedIn)
     return (
-      <motion.div
+      <motion.a
+        href={method.action}
+        target={
+          method.id === "github" || method.id === "linkedin"
+            ? "_blank"
+            : "_self"
+        }
+        rel={
+          method.id === "github" || method.id === "linkedin"
+            ? "noopener noreferrer"
+            : ""
+        }
         className="contact-card group"
         onHoverStart={() => setActiveCard(method.id)}
         onHoverEnd={() => setActiveCard(null)}
@@ -174,46 +244,18 @@ const Contact = () => {
               className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               whileHover={{ scale: 1.1 }}
             >
-              {method.action !== "#" ? (
-                <a
-                  href={method.action}
-                  target={method.id === "github" || method.id === "linkedin" || method.id === "whatsapp" ? "_blank" : "_self"}
-                  rel={method.id === "github" || method.id === "linkedin" || method.id === "whatsapp" ? "noopener noreferrer" : ""}
-                  className="text-purple-400 hover:text-purple-300 transition-colors"
-                >
-                  <ArrowUpRight className="w-5 h-5" />
-                </a>
-              ) : (
-                <MapPin className="w-5 h-5 text-gray-500" />
-              )}
+              <ArrowUpRight className="w-5 h-5 text-purple-400" />
             </motion.div>
           </div>
 
-          {/* Contact Value with Copy Functionality */}
-          <div className="flex items-center justify-between">
-            <motion.p
-              className="text-purple-300 font-medium text-sm"
-              initial={{ opacity: 0.8 }}
-              whileHover={{ opacity: 1 }}
-            >
-              {method.value}
-            </motion.p>
-            
-            {method.copyable && (
-              <motion.button
-                onClick={() => handleCopy(method.value, method.id)}
-                className="text-xs text-gray-400 hover:text-purple-400 transition-colors px-2 py-1 rounded-lg hover:bg-purple-500/10"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {copiedItem === method.id ? (
-                  <span className="text-green-400">✓ Copied</span>
-                ) : (
-                  "Copy"
-                )}
-              </motion.button>
-            )}
-          </div>
+          {/* Contact Value */}
+          <motion.p
+            className="text-purple-300 font-medium text-sm"
+            initial={{ opacity: 0.8 }}
+            whileHover={{ opacity: 1 }}
+          >
+            {method.value}
+          </motion.p>
 
           {/* Hover Border Effect */}
           <motion.div
@@ -225,7 +267,7 @@ const Contact = () => {
             <div className="absolute inset-[1px] rounded-2xl bg-gray-900/95"></div>
           </motion.div>
         </div>
-      </motion.div>
+      </motion.a>
     );
   };
 
@@ -233,7 +275,7 @@ const Contact = () => {
     <section
       id="contact"
       ref={sectionRef}
-      className="py-23 px-6 relative"
+      className="pt-24 pb-45 px-6 relative"
     >
       {/* Background Elements */}
       <div className="absolute inset-0">
@@ -282,12 +324,11 @@ const Contact = () => {
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Ready to bring your ideas to life? Let's connect and create something amazing together
+            Let's discuss how we can work together to bring your ideas to life
           </motion.p>
         </motion.div>
 
-        {/* Contact Methods Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {contactMethods.map((method, index) => (
             <ContactCard key={method.id} method={method} />
           ))}
