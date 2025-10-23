@@ -2,13 +2,13 @@
 // components/Navigation.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Home, User, Code, Folder, Mail } from 'lucide-react';
+import { Menu, X, Home, User, Code, Folder, Mail, FileText } from 'lucide-react';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
-  const isUserScrolling = useRef(true); // 🧠 track whether scroll updates are allowed
+  const isUserScrolling = useRef(true);
   const scrollTimeout = useRef(null);
 
   const navItems = [
@@ -19,11 +19,13 @@ const Navigation = () => {
     { id: 'contact', label: 'Contact', icon: Mail, href: '#contact' },
   ];
 
+  const resumeUrl = "https://drive.google.com/file/d/10KRxVozd2MdTzS67_fZhy51xlE5FBMv5/view?usp=sharing";
+
   useEffect(() => {
     let ticking = false;
 
     const handleScroll = () => {
-      if (!isUserScrolling.current) return; // 🚫 ignore while programmatic scroll is happening
+      if (!isUserScrolling.current) return;
 
       if (!ticking) {
         window.requestAnimationFrame(() => {
@@ -63,18 +65,22 @@ const Navigation = () => {
   const handleNavClick = (href, id) => {
     setIsOpen(false);
     setActiveSection(id);
-    isUserScrolling.current = false; // temporarily disable scroll tracking
+    isUserScrolling.current = false;
 
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
 
-    // 🕒 Re-enable scroll tracking after smooth scroll completes
     clearTimeout(scrollTimeout.current);
     scrollTimeout.current = setTimeout(() => {
       isUserScrolling.current = true;
-    }, 1000); // adjust duration based on your scroll speed
+    }, 1000);
+  };
+
+  const handleResumeClick = () => {
+    setIsOpen(false);
+    window.open(resumeUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -121,6 +127,24 @@ const Navigation = () => {
               )}
             </motion.a>
           ))}
+          
+          {/* Resume Button with Rainbow Border */}
+          <motion.button
+            onClick={handleResumeClick}
+            className="relative px-6 py-3 rounded-xl font-medium text-sm bg-gradient-to-r from-purple-900/80 to-pink-900/80 text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 transition-all duration-300 group ml-2 overflow-hidden"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {/* Rainbow Border Animation */}
+            <div className="absolute inset-0 rounded-xl p-[2px] bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 animate-rainbow border-0">
+              <div className="w-full h-full rounded-xl bg-gradient-to-r from-purple-900/80 to-pink-900/80 group-hover:from-purple-800/90 group-hover:to-pink-800/90 transition-all duration-300" />
+            </div>
+            
+            <div className="relative flex items-center gap-2 z-10">
+              <FileText className="w-4 h-4" />
+              <span>Resume</span>
+            </div>
+          </motion.button>
         </div>
       </motion.nav>
 
@@ -214,6 +238,27 @@ const Navigation = () => {
                     )}
                   </motion.a>
                 ))}
+                
+                {/* Mobile Resume Button with Rainbow Border */}
+                <motion.button
+                  onClick={handleResumeClick}
+                  className="relative px-4 py-3 rounded-xl font-medium text-sm text-white shadow-lg transition-all duration-300 w-full group overflow-hidden"
+                  whileHover={{ x: 5 }}
+                  whileTap={{ scale: 0.95 }}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navItems.length * 0.1 }}
+                >
+                  {/* Rainbow Border Animation */}
+                  <div className="absolute inset-0 rounded-xl p-[1.5px] bg-gradient-to-r from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500 animate-rainbow border-0">
+                    <div className="w-full h-full rounded-xl bg-gradient-to-r from-purple-900/80 to-pink-900/80 group-hover:from-purple-800/90 group-hover:to-pink-800/90 transition-all duration-300" />
+                  </div>
+                  
+                  <div className="relative flex items-center gap-3 z-10">
+                    <FileText className="w-4 h-4" />
+                    <span>Resume</span>
+                  </div>
+                </motion.button>
               </div>
             </motion.div>
           </>
@@ -227,6 +272,19 @@ const Navigation = () => {
         animate={{ scaleX: isScrolled ? 1 : 0 }}
         transition={{ duration: 0.3 }}
       />
+
+      {/* Add rainbow animation to CSS */}
+      <style jsx>{`
+        @keyframes rainbow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-rainbow {
+          background-size: 400% 400%;
+          animation: rainbow 3s ease infinite;
+        }
+      `}</style>
     </>
   );
 };

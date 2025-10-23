@@ -464,7 +464,7 @@ const Hero = () => {
                     <span className="text-yellow-400">[</span>
                     <span className="text-green-400">"React"</span>
                     <span className="text-yellow-400">, </span>
-                    <span className="text-green-400">"Next.js"</span>
+                    <span className="text-green-400">"MongoDB"</span>
                     <span className="text-yellow-400">, </span>
                     <span className="text-green-400">"AI/ML"</span>
                     <span className="text-yellow-400">]</span>
