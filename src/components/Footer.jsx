@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 // components/Footer.jsx
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail, Heart, ArrowUp } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { Github, Linkedin, Mail, Heart, ArrowUp } from "lucide-react";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -12,24 +12,24 @@ const Footer = () => {
       icon: Github,
       label: "GitHub",
       url: "https://github.com/Akhlakur07",
-      color: "hover:from-gray-400 hover:to-gray-600"
+      color: "hover:from-gray-400 hover:to-gray-600",
     },
     {
       icon: Linkedin,
       label: "LinkedIn",
       url: "https://www.linkedin.com/in/akhlakur-rahman-92ba312bb/",
-      color: "hover:from-blue-400 hover:to-blue-600"
+      color: "hover:from-blue-400 hover:to-blue-600",
     },
     {
       icon: Mail,
       label: "Email",
-      url: "mailto:ssrmm2000@gmail.com",
-      color: "hover:from-purple-400 hover:to-pink-500"
-    }
+      url: "mailto:akhlak.ur433@gmail.com",
+      color: "hover:from-purple-400 hover:to-pink-500",
+    },
   ];
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -54,7 +54,7 @@ const Footer = () => {
               Akhlakur Rahman
             </h3>
             <p className="text-gray-400 mb-6 max-w-md">
-              Frontend Developer passionate about creating digital experiences 
+              Frontend Developer passionate about creating digital experiences
               that combine innovative design with cutting-edge technology.
             </p>
             <div className="flex gap-4">
@@ -65,9 +65,9 @@ const Footer = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`w-12 h-12 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl flex items-center justify-center transition-all duration-300 ${social.color} hover:bg-gradient-to-r hover:shadow-lg`}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.1,
-                    y: -2
+                    y: -2,
                   }}
                   whileTap={{ scale: 0.9 }}
                 >
@@ -84,26 +84,32 @@ const Footer = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-lg font-semibold text-white mb-4">Navigation</h4>
+            <h4 className="text-lg font-semibold text-white mb-4">
+              Navigation
+            </h4>
             <ul className="space-y-3">
-              {['Home', 'About', 'Skills', 'Projects', 'Contact'].map((item) => (
-                <li key={item}>
-                  <motion.a
-                    href={`#${item.toLowerCase()}`}
-                    className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm"
-                    whileHover={{ x: 5 }}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      const element = document.getElementById(item.toLowerCase());
-                      if (element) {
-                        element.scrollIntoView({ behavior: 'smooth' });
-                      }
-                    }}
-                  >
-                    {item}
-                  </motion.a>
-                </li>
-              ))}
+              {["Home", "About", "Skills", "Projects", "Contact"].map(
+                (item) => (
+                  <li key={item}>
+                    <motion.a
+                      href={`#${item.toLowerCase()}`}
+                      className="text-gray-400 hover:text-purple-400 transition-colors duration-300 text-sm"
+                      whileHover={{ x: 5 }}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const element = document.getElementById(
+                          item.toLowerCase()
+                        );
+                        if (element) {
+                          element.scrollIntoView({ behavior: "smooth" });
+                        }
+                      }}
+                    >
+                      {item}
+                    </motion.a>
+                  </li>
+                )
+              )}
             </ul>
           </motion.div>
 
@@ -114,16 +120,20 @@ const Footer = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            <h4 className="text-lg font-semibold text-white mb-4">Get In Touch</h4>
+            <h4 className="text-lg font-semibold text-white mb-4">
+              Get In Touch
+            </h4>
             <div className="space-y-3 text-sm">
               <p className="text-gray-400">
-                <span className="text-purple-400">Email:</span> ssrmm2000@gmail.com
+                <span className="text-purple-400">Email:</span>{" "}
+                akhlak.ur433@gmail.com
               </p>
               <p className="text-gray-400">
                 <span className="text-purple-400">Phone:</span> +880 1305-685267
               </p>
               <p className="text-gray-400">
-                <span className="text-purple-400">Location:</span> Dhaka, Bangladesh
+                <span className="text-purple-400">Location:</span> Dhaka,
+                Bangladesh
               </p>
             </div>
           </motion.div>
@@ -140,14 +150,14 @@ const Footer = () => {
           >
             <span>© {currentYear} Akhlakur Rahman. Made with</span>
             <motion.div
-              animate={{ 
+              animate={{
                 scale: [1, 1.2, 1],
-                rotate: [0, 10, -10, 0]
+                rotate: [0, 10, -10, 0],
               }}
-              transition={{ 
+              transition={{
                 duration: 2,
                 repeat: Infinity,
-                repeatDelay: 3
+                repeatDelay: 3,
               }}
             >
               <Heart className="w-4 h-4 text-pink-500 fill-current" />
@@ -159,9 +169,9 @@ const Footer = () => {
           <motion.button
             onClick={scrollToTop}
             className="flex items-center gap-2 px-4 py-2 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl text-gray-400 hover:text-white transition-all duration-300 group"
-            whileHover={{ 
+            whileHover={{
               scale: 1.05,
-              y: -2
+              y: -2,
             }}
             whileTap={{ scale: 0.95 }}
             initial={{ opacity: 0 }}
@@ -172,10 +182,10 @@ const Footer = () => {
             <span className="text-sm">Back to Top</span>
             <motion.div
               animate={{ y: [0, -3, 0] }}
-              transition={{ 
+              transition={{
                 duration: 2,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut",
               }}
             >
               <ArrowUp className="w-4 h-4 group-hover:text-purple-400 transition-colors" />

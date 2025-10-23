@@ -6,12 +6,13 @@ import {
   Mail,
   Phone,
   MapPin,
-  Send,
   Github,
   Linkedin,
   Briefcase,
   ArrowUpRight,
   MessageCircle,
+  Calendar,
+  Sparkles,
 } from "lucide-react";
 import { gsap } from "gsap";
 import Shuffle from "./Shuffle";
@@ -21,12 +22,7 @@ const Contact = () => {
   const isInView = useInView(sectionRef, { once: false, margin: "-100px" });
 
   const [activeCard, setActiveCard] = useState(null);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [copiedItem, setCopiedItem] = useState(null);
 
   const contactMethods = [
     {
@@ -34,9 +30,10 @@ const Contact = () => {
       icon: Mail,
       title: "Email",
       description: "For professional inquiries and collaborations",
-      value: "ssrmm2000@gmail.com",
-      action: "mailto:ssrmm2000@gmail.com",
+      value: "akhlak.ur433@gmail.com",
+      action: "mailto:akhlak.ur433@gmail.com",
       color: "from-purple-600 to-blue-600",
+      copyable: true,
     },
     {
       id: "whatsapp",
@@ -46,6 +43,7 @@ const Contact = () => {
       value: "+880 1305-685267",
       action: "https://wa.me/8801305685267",
       color: "from-green-600 to-emerald-600",
+      copyable: true,
     },
     {
       id: "phone",
@@ -55,6 +53,7 @@ const Contact = () => {
       value: "+880 1305-685267",
       action: "tel:+8801305685267",
       color: "from-blue-600 to-cyan-600",
+      copyable: true,
     },
     {
       id: "location",
@@ -64,6 +63,7 @@ const Contact = () => {
       value: "Mirpur, Dhaka",
       action: "#",
       color: "from-green-600 to-teal-600",
+      copyable: false,
     },
     {
       id: "github",
@@ -73,6 +73,7 @@ const Contact = () => {
       value: "github.com/Akhlakur07",
       action: "https://github.com/Akhlakur07",
       color: "from-gray-700 to-gray-900",
+      copyable: false,
     },
     {
       id: "linkedin",
@@ -82,6 +83,7 @@ const Contact = () => {
       value: "linkedin.com/in/akhlakur-rahman",
       action: "https://www.linkedin.com/in/akhlakur-rahman-92ba312bb/",
       color: "from-blue-500 to-blue-700",
+      copyable: false,
     },
   ];
 
@@ -107,16 +109,16 @@ const Contact = () => {
         }
       );
 
-      // Animate form
+      // Animate CTA section
       tl.fromTo(
-        ".contact-form",
+        ".cta-section",
         {
           opacity: 0,
-          x: 50,
+          y: 50,
         },
         {
           opacity: 1,
-          x: 0,
+          y: 0,
           duration: 0.8,
           ease: "power3.out",
         },
@@ -125,45 +127,19 @@ const Contact = () => {
     }
   }, [isInView]);
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setFormData({
-        name: "",
-        email: "",
-        message: "",
-      });
-    }, 2000);
+  const handleCopy = async (text, itemId) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedItem(itemId);
+      setTimeout(() => setCopiedItem(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
   };
 
   const ContactCard = ({ method }) => {
     return (
-      <motion.a
-        href={method.action}
-        target={
-          method.id === "github" ||
-          method.id === "linkedin" ||
-          method.id === "whatsapp"
-            ? "_blank"
-            : "_self"
-        }
-        rel={
-          method.id === "github" ||
-          method.id === "linkedin" ||
-          method.id === "whatsapp"
-            ? "noopener noreferrer"
-            : ""
-        }
+      <motion.div
         className="contact-card group"
         onHoverStart={() => setActiveCard(method.id)}
         onHoverEnd={() => setActiveCard(null)}
@@ -198,18 +174,46 @@ const Contact = () => {
               className="opacity-0 group-hover:opacity-100 transition-opacity duration-300"
               whileHover={{ scale: 1.1 }}
             >
-              <ArrowUpRight className="w-5 h-5 text-purple-400" />
+              {method.action !== "#" ? (
+                <a
+                  href={method.action}
+                  target={method.id === "github" || method.id === "linkedin" || method.id === "whatsapp" ? "_blank" : "_self"}
+                  rel={method.id === "github" || method.id === "linkedin" || method.id === "whatsapp" ? "noopener noreferrer" : ""}
+                  className="text-purple-400 hover:text-purple-300 transition-colors"
+                >
+                  <ArrowUpRight className="w-5 h-5" />
+                </a>
+              ) : (
+                <MapPin className="w-5 h-5 text-gray-500" />
+              )}
             </motion.div>
           </div>
 
-          {/* Contact Value */}
-          <motion.p
-            className="text-purple-300 font-medium text-sm"
-            initial={{ opacity: 0.8 }}
-            whileHover={{ opacity: 1 }}
-          >
-            {method.value}
-          </motion.p>
+          {/* Contact Value with Copy Functionality */}
+          <div className="flex items-center justify-between">
+            <motion.p
+              className="text-purple-300 font-medium text-sm"
+              initial={{ opacity: 0.8 }}
+              whileHover={{ opacity: 1 }}
+            >
+              {method.value}
+            </motion.p>
+            
+            {method.copyable && (
+              <motion.button
+                onClick={() => handleCopy(method.value, method.id)}
+                className="text-xs text-gray-400 hover:text-purple-400 transition-colors px-2 py-1 rounded-lg hover:bg-purple-500/10"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {copiedItem === method.id ? (
+                  <span className="text-green-400">✓ Copied</span>
+                ) : (
+                  "Copy"
+                )}
+              </motion.button>
+            )}
+          </div>
 
           {/* Hover Border Effect */}
           <motion.div
@@ -221,7 +225,7 @@ const Contact = () => {
             <div className="absolute inset-[1px] rounded-2xl bg-gray-900/95"></div>
           </motion.div>
         </div>
-      </motion.a>
+      </motion.div>
     );
   };
 
@@ -229,7 +233,7 @@ const Contact = () => {
     <section
       id="contact"
       ref={sectionRef}
-      className="min-h-screen py-25 px-6 relative"
+      className="py-23 px-6 relative"
     >
       {/* Background Elements */}
       <div className="absolute inset-0">
@@ -278,127 +282,15 @@ const Contact = () => {
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            Let's discuss how we can work together to bring your ideas to life
+            Ready to bring your ideas to life? Let's connect and create something amazing together
           </motion.p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-          {/* Contact Methods */}
-          <div className="space-y-6">
-            <motion.h3
-              className="text-2xl font-bold text-white mb-8"
-              initial={{ opacity: 0, x: -30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.3 }}
-            >
-              Contact Methods
-            </motion.h3>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {contactMethods.map((method, index) => (
-                <ContactCard key={method.id} method={method} />
-              ))}
-            </div>
-          </div>
-
-          {/* Contact Form */}
-          <motion.div
-            className="contact-form"
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <div className="bg-gray-900/30 backdrop-blur-sm border border-gray-700/30 rounded-2xl p-8">
-              <div className="flex items-center gap-3 mb-6">
-                <Send className="w-6 h-6 text-purple-500" />
-                <h3 className="text-2xl font-bold text-white">
-                  Send a Message
-                </h3>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Full Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-all"
-                    placeholder="Enter your full name"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Email Address
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-all"
-                    placeholder="Enter your email address"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-300 mb-2"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    required
-                    rows="5"
-                    className="w-full px-4 py-3 bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-all resize-none"
-                    placeholder="Tell me about your project or inquiry..."
-                  />
-                </div>
-
-                <motion.button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full py-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold rounded-xl hover:shadow-xl hover:shadow-purple-500/20 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                  whileHover={{
-                    scale: isSubmitting ? 1 : 1.02,
-                    y: isSubmitting ? 0 : -2,
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  {isSubmitting ? (
-                    <div className="flex items-center justify-center gap-3">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      Sending Message...
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-center gap-3">
-                      <Send className="w-5 h-5" />
-                      Send Message
-                    </div>
-                  )}
-                </motion.button>
-              </form>
-            </div>
-          </motion.div>
+        {/* Contact Methods Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+          {contactMethods.map((method, index) => (
+            <ContactCard key={method.id} method={method} />
+          ))}
         </div>
       </div>
     </section>

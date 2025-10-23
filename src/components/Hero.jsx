@@ -156,6 +156,7 @@ const Hero = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
+      onClick={() => window.open(project.link, '_blank', 'noopener,noreferrer')}
     >
       {/* Gradient Overlay */}
       <div className={`absolute inset-0 bg-gradient-to-br ${project.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500`} />
@@ -195,20 +196,13 @@ const Hero = () => {
 
       {/* Project Stats */}
       <div className="flex items-center justify-between text-xs text-gray-400 border-t border-gray-700/30 pt-3">
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1">
-            <GitBranch className="w-3 h-3" />
-            <span>{project.stats.commits}</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Users className="w-3 h-3" />
-            <span>{project.stats.users}</span>
-          </div>
-        </div>
         <div className={`flex items-center gap-1 ${project.status === 'Live' ? 'text-green-400' : 'text-yellow-400'}`}>
           <div className={`w-2 h-2 rounded-full ${project.status === 'Live' ? 'bg-green-400' : 'bg-yellow-400'}`} />
           <span>{project.status}</span>
         </div>
+        <span className="text-purple-400 hover:text-purple-300 transition-colors">
+          Visit Site →
+        </span>
       </div>
 
       {/* Progress Bar */}
@@ -231,9 +225,9 @@ const Hero = () => {
       technologies: ["React", "Firebase", "MongoDB", "Tailwind"],
       gradient: "from-purple-500 to-pink-500",
       icon: Target,
-      stats: { commits: "1.2k", users: "500+" },
       status: "Live",
-      progress: 95
+      progress: 95,
+      link: "https://learnly-auth.web.app/"
     },
     {
       title: "StackVault",
@@ -242,9 +236,9 @@ const Hero = () => {
       technologies: ["React", "Node.js", "MongoDB", "Express"],
       gradient: "from-blue-500 to-cyan-500",
       icon: Zap,
-      stats: { commits: "890", users: "2.1k" },
       status: "Live",
-      progress: 88
+      progress: 88,
+      link: "https://stack-web-6def0.web.app/"
     },
     {
       title: "VolunteerHub",
@@ -253,9 +247,9 @@ const Hero = () => {
       technologies: ["React", "Firebase", "CSS3", "JavaScript"],
       gradient: "from-green-500 to-teal-500",
       icon: Users,
-      stats: { commits: "650", users: "1.5k" },
       status: "Live",
-      progress: 92
+      progress: 92,
+      link: "https://volunteer-auth-e1a75.web.app/"
     }
   ];
 
